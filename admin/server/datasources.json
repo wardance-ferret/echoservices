@@ -1,0 +1,15 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "adminDb": {
+    "host": "localhost",
+    "port": 27017,
+    "database": "esadmin",
+    "username": "admin_user",
+    "password": "password",
+    "name": "adminDb",
+    "connector": "mongodb"
+  }
+}
