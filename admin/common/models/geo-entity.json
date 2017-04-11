@@ -1,0 +1,38 @@
+{
+  "name": "GeoEntity",
+  "plural": "GeoEntities",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "default": "Spoke"
+    },
+    "zipcode": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "geoEntities": {
+      "type": "hasAndBelongsToMany",
+      "model": "GeoEntity",
+      "foreignKey": ""
+    },
+    "clinics": {
+      "type": "hasMany",
+      "model": "Clinic",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

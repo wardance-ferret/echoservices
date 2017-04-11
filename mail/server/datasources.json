@@ -2,14 +2,14 @@
   "db": {
     "name": "db",
     "connector": "memory"
-  },  
-  "adminDb": {
-  	"name": "adminDb",
-  	"host": "localhost",
+  },
+  "mailDb": {
+    "host": "localhost",
     "port": 27017,
-    "database": "esadmin",
+    "database": "esmail",
+    "username": "mail_user",
     "password": "password",
-    "username": "admin_user",
+    "name": "mailDb",
     "connector": "mongodb"
   }
 }

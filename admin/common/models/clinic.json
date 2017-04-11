@@ -1,0 +1,36 @@
+{
+  "name": "Clinic",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "visibility": {
+      "type": "boolean",
+      "default": true
+    },
+    "hubGeoEntityId": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "geoEntity": {
+      "type": "belongsTo",
+      "model": "GeoEntity",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

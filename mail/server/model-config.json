@@ -14,10 +14,11 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "mailDb",
+    "public": true
   },
   "AccessToken": {
-    "dataSource": "db",
+    "dataSource": "mailDb",
     "public": false
   },
   "ACL": {
@@ -34,5 +35,9 @@
   "Role": {
     "dataSource": "db",
     "public": false
+  },
+  "Message": {
+    "dataSource": "mailDb",
+    "public": true
   }
 }

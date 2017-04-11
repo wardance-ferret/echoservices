@@ -26,14 +26,26 @@
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "db",
+    "dataSource": "adminDb",
     "public": false,
     "options": {
       "strictObjectIDCoercion": true
     }
   },
   "Role": {
-    "dataSource": "db",
+    "dataSource": "adminDb",
     "public": false
+  },
+  "Clinic": {
+    "dataSource": "adminDb",
+    "public": true
+  },
+  "Person": {
+    "dataSource": "adminDb",
+    "public": true
+  },
+  "GeoEntity": {
+    "dataSource": "adminDb",
+    "public": true
   }
 }
