@@ -5,13 +5,13 @@
   },
 
   "tzapiDb":{
-  	"name": "tzabiDb",
-  	"connector": "mongodb",
-  	"host": "localhost",
+    "name": "tzapiDb",
+    "connector": "mongodb",
+    "host": "localhost",
     "port": 27017,
     "database": "tzapi",
-    "password": "pw1234echo",
+    "password": "yourpasswordhere",
     "username": "tzapi_user",
-    "url": "mongodb://tzapi_user:pw1234echo@localhost:27017/tzapi?authMode=scram-sha1&rm.tcpNoDelay=true"
+    "url": "mongodb://tzapi_user:yourpasswordhere@localhost:27017/tzapi?authMode=scram-sha1&rm.tcpNoDelay=true"
   }
 }
