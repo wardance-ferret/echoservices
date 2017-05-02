@@ -1,0 +1,115 @@
+"Time Zones and Zoom Research - Sprint.  No implementation!"
+----------
+Sprint (May 1 - )
+
+Time Zones
+----------
+There exists a remote partner in Alaska, they want time zones
+and do not want zoom.  Think of +/- hrs W of Mountain Time (or some origin).
+Zoom implementation is slightly less pressing than TZ, because of Alaska.
+
+Story in EA-640
+
+Users should see session times in their local time.
+Hubs no TZs
+
+
+Zoom Integration
+----------------
+
+Story in EA-666
+
+Staff should appear distinct from "ItSupport" in the lists
+Coordinator, Specialist, IT Support can start a meeting (start "zoom" button in their program, in a delta time around the meeting start.)
+(join button for al others)
+when the start button is pressed then everybody except the starter sees join
+
+ItSupport has identical permissions from Staff except for adding participant.
+(The slides on Zoom Int design are stored with the story) 
+
+Jonathan will create a separate ticket for the new role ITSupport.
+
+Zoom API
+--------
+-create users
+-create meeting
+-every meeting has host
+ can enable people to start meeting without the host
+ (we don't want that)
+-co host (can mute or record)
+-alternative host
+
+-every meeting has a password 
+  but pw rarely changed
+  An 'Edit Clinic' panel will show the Clinic Capacity, TZ, Zoom ID, password change password will need to be changed through the API
+
+-we will *not* be granting zoom account passwords  (zoom accts cost $15/mo) (Jonathan)
+ there will be a single service account I guess? -Eric
+
+(Stored with the story) 
+Jody took some notes on how Zoom gets used -> will add to the tickets
+
+Can hosting for meeting be transferred to a new user?
+When participant joins a meeting, member profile info will update acct
+
+
+//visual mockup from Jerry
+
+Usability review for FE
+------------------------
+David will have plenty to do, might be too soon to even come up with a mock API the BE needs to fulfill.  Sarah has tested little on mobile devices.
+
+Goal
+----
+
+1st week of September: 600-800 people come to metaECHO conference at Abq Conv Center.  Jonathan will give an update.
+
+Over summer (May-August) go into beta testing w/features(and what else??)  
+
+Jonathan's feature preview:
+---------------------------
+-Zoom integration
+-TZ
+-Simple exporting of spreadsheet as data
+(later we'll tweak for time ranges, filters on the data)
+-Technical debt pay down
+-Cover photos (person avatar) has FE issues with cropping images, also BE issues with storage and providing image handles.
+-File upload will handle recommendations (NO MORE TEXT RECS!)(so the same permissions for case prez would apply to recs)
+
+EA-640 (MAY 1 snapshot)
+======
+As a Clinic Coordinator, I need to schedule a clinic session [in the local time where the hub is located]. If I'm traveling and in a different timezone than where the Clinic is based, I should be able to schedule a session and be sure that it is going to happen at the right time I expect. 
+
+As a Participant, I need to see when the clinic sessions are scheduled for  - in MY time zone, no matter where I am in the world. 
+
+Most of all I need to know with certainty when time a clinic session will happen, no ambiguity or uncertainty about timezones or Daylight Savings. 
+
+ 
+
+Acceptance Criteria:
+ * Everywhere in the Clinic feed where a session time is displayed, there must be a label identifying the TZ  (e.g. 10:00AM - 11:30AM PDT)
+ * Our system automatically detects the user's timezone from their browser, so they don't have to set it. 
+ * User should be able to see in User Settings what their timezone is, and manually change it (e.g. when traveling).
+ * We will automatically adjust a user's timezone to manage Daylight Savings (e.g. change from MST to MDT).  
+ * User should see clinic session times displayed in their own TZ
+ * Clinic must have its own Location, which is chosen at the time of clinic creation. This informs the Timezone.
+ * CC's can edit the location of the clinic, in case it changes, or the TZ is somehow incorrect. 
+ * When scheduling a session, the Clinic Coordinator must see the time the Clinic Timezone, not necessarily their personal timezone. e.g. a Coordinator in NM schedules a session for a NY clinic. In the scheduling window, they see EDT. In the feed they see it in MDT.
+
+  
+
+Daylight Savings - we have to adjust the user's timezones for Daylight Savings Time changes. Bad use case: time switches to DST, but a user's account doesn't, so then they see all times displayed in local standard time, not local DST, i.e. off by 1 hour. So we have to autodetect and correct for DST offset from UTC. Note: DST switch occurs in different times in different countries. 
+
+Helpful list of timezones, with abbreviations and their UTC offsets: [https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations]
+
+Some background info on Timezones:
+
+[http://stackoverflow.com/questions/2532729/daylight-saving-time-and-time-zone-best-practices]
+
+[http://stackoverflow.com/questions/10834665/how-can-i-handle-time-zones-in-my-webapp/10989404]
+
+[http://momentjs.com/timezone/]
+
+
+My GMTZAPI API Key: AIzaSyAHRHmmRyFwIw2CeQ6DriysZzX0oWFNNMM
+

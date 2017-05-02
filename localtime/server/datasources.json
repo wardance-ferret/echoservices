@@ -1,0 +1,17 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+
+  "tzapiDb":{
+  	"name": "tzabiDb",
+  	"connector": "mongodb",
+  	"host": "localhost",
+    "port": 27017,
+    "database": "tzapi",
+    "password": "pw1234echo",
+    "username": "tzapi_user",
+    "url": "mongodb://tzapi_user:pw1234echo@localhost:27017/tzapi?authMode=scram-sha1&rm.tcpNoDelay=true"
+  }
+}
