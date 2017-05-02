@@ -1,2 +1,5 @@
 .env
 .env.example
+docs
+logs
+node_modules
