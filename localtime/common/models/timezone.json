@@ -33,6 +33,12 @@
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
+      "property": "testClient1",
+      "permission": "ALLOW"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
       "property": "getFromThirdParty",
       "permission": "ALLOW"
     },
