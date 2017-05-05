@@ -5,6 +5,9 @@ const utils = require('loopback-datasource-juggler/lib/utils');
 // const googleMapsClient = require('@google/maps').createClient({
 // 			key: process.env.GOOGLE_API_KEY
 // });
+const logger = require('../../server/logger');
+const urlencode = require('url-encode');
+const Rx = require('rxjs/Rx');
 
 module.exports = function(Timezone) {
 
@@ -43,7 +46,7 @@ module.exports = function(Timezone) {
 
 		// });
 
-		//promise not returned, then is not a function	
+		//promise not returned, .then is not a function	
 		maps.createClient({key:process.env.GOOGLE_API_KEY, Promise: require('bluebird').Promise}).then(
 			function(client){
 			console.log(JSON.stringify(client));
@@ -60,76 +63,132 @@ module.exports = function(Timezone) {
 	};
 
 
-	// Timezone.testClient1 = function(callback){
-	// 	console.log('API KEY: '+process.env.GOOGLE_API_KEY); 
+	Timezone.testClient2 = function(callback){
+	  console.log('testClient2...');	
+	  console.log('API URL:'+process.env.GOOGLE_API_URL);
+	  console.log('API KEY: '+process.env.GOOGLE_API_KEY);
+
+	  var apiUrl = process.env.GOOGLE_API_URL+'/timezone/json';
+
+	  apiUrl += '?location=33.45,-112.067&timestamp=1458000000&key='+process.env.GOOGLE_API_KEY;
+
+
+	  var headers = {
+       'Authorization':'Bearer '+process.env.GOOGLE_API_KEY,
+       'Content-Type':'application/json'
+      };
+
+      var data = { headers:headers, url:apiUrl} 
+	  
+	  Timezone.app.observable.sendObservableRequest(data,"get")
+	    .flatMap((response) => {
+	      logger.log('debug','response: '+JSON.stringify(response));
+	      return Rx.Observable.from([JSON.parse(response.body)]);
+        }).subscribe(Timezone.app.observable.concatAndFinalize(callback,[]));
+	};
+
+	//use this method as a placeholder for getting a list of city -> tz pairs used in a clinic settings dropdown 
+	// Timezone.getFromThirdParty = function(callback){
 	// 	callback(null,[]);
 	// };
 
 
-	//use this method as a placeholder for getting a list of city -> tz pairs used in a clinic settings dropdown 
-	Timezone.getFromThirdParty = function(callback){
-		callback(null,[]);
-	};
-
-    //return a time zone for a lat lon pair
-	Timezone.fromLatLon = function(lat,lon,callback){
-		callback(null,[]);
-	};
-
-
-
-
 	Timezone.utcToLocal = function(timestamp, lat, lon, callback){
-		callback(null,[]);
+
+	  console.log('API KEY: '+process.env.GOOGLE_API_KEY); 
+
+	  var apiUrl = process.env.GOOGLE_API_URL+'/timezone/json';
+
+	  apiUrl += '?location='+lat+','+lon+'&timestamp='+timestamp+'&key='+process.env.GOOGLE_API_KEY;
+
+      console.log(apiUrl);
+
+	  var headers = {
+       'Authorization':'Bearer '+process.env.GOOGLE_API_KEY,
+       'Content-Type':'application/json'
+      };
+
+      var data = { headers:headers, url:apiUrl} 
+	  
+	  Timezone.app.observable.sendObservableRequest(data,"get")
+	    .flatMap((response) => {
+	      logger.log('debug','response: '+JSON.stringify(response));
+	      return Rx.Observable.from([JSON.parse(response.body)]);
+        }).subscribe(Timezone.app.observable.concatAndFinalize(callback,[]));
+	
 	};
 
 	Timezone.localToUtc = function(timestamp, lat, lon, callback){
 		callback(null,[]);
 	}
 
+
+	Timezone.makeUrlSafeForQuery = function(rawUrl){
+		
+ 		rawUrl = rawUrl.replace(/\s+/g,'+');
+ 		var encoded = rawUrl;
+
+		try {
+		  encoded = urlencode(rawUrl);
+		}catch(error){
+		  console.error(error);	
+		}
+
+		return encoded;
+	}
+
+
 	Timezone.geocode = function(address, callback){
 
-        console.log('API KEY: '+process.env.GOOGLE_API_KEY); 
-  
-		var googleMapsClient = require('@google/maps').createClient({
-			key: process.env.GOOGLE_API_KEY
-		});
+      console.log('API KEY: '+process.env.GOOGLE_API_KEY); 
+  	  var rawUrl = process.env.GOOGLE_API_URL+'/geocode/json';
 
-		googleMapsClient.geocode({address: '411 Brandon Ave Charlottesville, VA 22903'}, function(err, response){
-			if (err){
-				console.error(err);
-				callback(err);
-			} else {
-                console.log(response);
-				callback(null,[]);
-		    }
-		})
+	  rawUrl += '?address='+address+'&key='+process.env.GOOGLE_API_KEY;
+
+	  var apiUrl = Timezone.makeUrlSafeForQuery(rawUrl);
+
+	  console.log('API URL: '+apiUrl);
+
+	  var headers = {
+       'Authorization':'Bearer '+process.env.GOOGLE_API_KEY,
+       'Content-Type':'application/json'
+      };
+
+      var dp = { headers:headers, url:apiUrl}
+	  
+	  Timezone.app.observable.sendObservableRequest(dp,"get")
+	    .flatMap((response) => {
+	      logger.log('debug','response: '+JSON.stringify(response.body));
+	      return Rx.Observable.from([JSON.parse(response.body)]).map((json)=>{
+	      	//console.log('work on this data: '+JSON.stringify(json['results'][0]['geometry']['location']));
+	      	return json['results'][0]['geometry']['location'];
+	      });
+        }).subscribe(Timezone.app.observable.concatAndFinalize(callback,[]));
+
 	};
+
+	Timezone.remoteMethod('testClient1',{
+		description: 'make server API call to get all possible timezones.',
+		accepts:[],
+		http:{path:'/testClient1',verb:'get'},
+        returns: {arg: 'testResponse',type:'Object'}
+	});
+
 
 	Timezone.remoteMethod('testClient2',{
 		description: 'make server API call to get all possible timezones.',
 		accepts:[],
 		http:{path:'/testClient2',verb:'get'},
-        returns: {arg: 'allTimezones',type:'Object'}
+        returns: {arg: 'testResponse',type:'Object'}
 	});
 
 	//remote method for third-party API to populate the TZ DB
-	Timezone.remoteMethod('getFromThirdParty',{
-		description: 'make server API call to get all possible timezones.',
-		accepts:[],
-		http:{path:'/getFromThirdParty',verb:'get'},
-        returns: {arg: 'allTimezones',type:'Object'}
-	});
-
-	Timezone.remoteMethod('fromLatLon',{
-		description: 'estimate the time zone from the lat and lon',
-		accepts:[
-			{arg: 'lat', type: 'number'},
-			{arg: 'lon', type: 'number'}
-		],
-		http:{path:'/fromLatLon',verb:'get'},
-        returns: {arg: 'timezone',type:'Object'}
-	});
+	// Timezone.remoteMethod('getFromThirdParty',{
+	// 	description: 'make server API call to get all possible timezones.',
+	// 	accepts:[],
+	// 	http:{path:'/getFromThirdParty',verb:'get'},
+ //        returns: {arg: 'allTimezones',type:'Object'}
+	// });
 
 
 	//think through DST portion and add more methods...

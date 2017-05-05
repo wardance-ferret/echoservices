@@ -39,6 +39,12 @@
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
+      "property": "testClient2",
+      "permission": "ALLOW"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
       "property": "getFromThirdParty",
       "permission": "ALLOW"
     },
@@ -51,7 +57,13 @@
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "property": "localizeTimestamp",
+      "property": "localToUtc",
+      "permission": "ALLOW"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "property": "utcToLocal",
       "permission": "ALLOW"
     },
     {
