@@ -1,0 +1,41 @@
+{
+  "name": "Program",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "visibility": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "timezoneId": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "sessions": {
+      "type": "hasMany",
+      "model": "Session",
+      "foreignKey": ""
+    },
+    "timezone": {
+      "type": "belongsTo",
+      "model": "Timezone",
+      "foreignKey":"" 
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

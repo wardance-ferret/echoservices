@@ -8,6 +8,7 @@ const utils = require('loopback-datasource-juggler/lib/utils');
 const logger = require('../../server/logger');
 const urlencode = require('url-encode');
 const Rx = require('rxjs/Rx');
+const cjson = require('circular-json');
 
 module.exports = function(Timezone) {
 
@@ -63,6 +64,26 @@ module.exports = function(Timezone) {
 	};
 
 
+
+
+	Timezone.beforeRemote('testClient2', function(context,instance,next){
+
+	  var printHere = function(position){
+	  	console.log(position.coords.latitude+', '+position.coords.longitude);
+	  }	
+
+	   //context.navigator.geolocation.getCurrentPosition(printHere);
+       console.log('browserID: '+cjson.stringify(context.req.headers['user-agent']));
+       next();
+	});
+
+
+    /*
+    *@name Timezone#testClient2
+    *@function
+    *@param {ResponseCallback} callback Callback function for handling the result
+    *@return {RequestHandle}
+    */
 	Timezone.testClient2 = function(callback){
 	  console.log('testClient2...');	
 	  console.log('API URL:'+process.env.GOOGLE_API_URL);
@@ -71,7 +92,6 @@ module.exports = function(Timezone) {
 	  var apiUrl = process.env.GOOGLE_API_URL+'/timezone/json';
 
 	  apiUrl += '?location=33.45,-112.067&timestamp=1458000000&key='+process.env.GOOGLE_API_KEY;
-
 
 	  var headers = {
        'Authorization':'Bearer '+process.env.GOOGLE_API_KEY,
@@ -88,12 +108,15 @@ module.exports = function(Timezone) {
 	};
 
 	//use this method as a placeholder for getting a list of city -> tz pairs used in a clinic settings dropdown 
+	//Is this because people are more likely to know the nearest large city than a zone name? 
+	
+	//this would be a reason to store a city->tz map in a local database.
 	// Timezone.getFromThirdParty = function(callback){
 	// 	callback(null,[]);
 	// };
 
 
-	Timezone.utcToLocal = function(timestamp, lat, lon, callback){
+	Timezone.getTimeZone = function(timestamp, lat, lon, callback){
 
 	  console.log('API KEY: '+process.env.GOOGLE_API_KEY); 
 
@@ -115,11 +138,78 @@ module.exports = function(Timezone) {
 	      logger.log('debug','response: '+JSON.stringify(response));
 	      return Rx.Observable.from([JSON.parse(response.body)]);
         }).subscribe(Timezone.app.observable.concatAndFinalize(callback,[]));
+
+	};
+
+
+    /*
+    *@name Timezone#utcToLocal
+    *@function
+	*@param {timestamp}
+    *@param {lat}
+    *@param {lon}
+    *@param {ResponseCallback} callback Callback function for handling the result
+    *@return {RequestHandle}
+    */
+    //timestamp must be in seconds
+	Timezone.utcToLocal = function(timestamp, lat, lon, callback){
+	  
+	  console.log('API KEY: '+process.env.GOOGLE_API_KEY); 
+
+	  var apiUrl = process.env.GOOGLE_API_URL+'/timezone/json';
+
+	  apiUrl += '?location='+lat+','+lon+'&timestamp='+timestamp+'&key='+process.env.GOOGLE_API_KEY;
+
+      console.log(apiUrl);
+
+	  var headers = {
+       'Authorization':'Bearer '+process.env.GOOGLE_API_KEY,
+       'Content-Type':'application/json'
+      };
+
+      var data = { headers:headers, url:apiUrl} 
+	  
+	  Timezone.app.observable.sendObservableRequest(data,"get")
+	    .flatMap((response) => {
+	      logger.log('debug','response: '+JSON.stringify(response));
+	      return Rx.Observable.from([JSON.parse(response.body)]).map((body)=>{
+	      		console.log('body.rawOffset: '+JSON.stringify(body.rawOffset));
+	      		var localtime = new Number(timestamp) + new Number(body.rawOffset) + new Number(body.dstOffset);
+	      		//what context clues help? -- do we need?
+	      		return {timestamp:localtime, formatted: Timezone.app.date.formatUnixTimestamp(localtime), lat:lat, lng:lon, originalUtc:timestamp, rawOffset:body.rawOffset, dstOffset:body.dstOffset, timeZoneId:body.timeZoneId, timeZoneName:body.timeZoneName, createdAt: Math.floor(new Date().getTime()/1000)};  
+	      });
+        }).subscribe(Timezone.app.observable.concatAndFinalize(callback,[]));
+
 	
 	};
 
 	Timezone.localToUtc = function(timestamp, lat, lon, callback){
-		callback(null,[]);
+	  
+	  console.log('API KEY: '+process.env.GOOGLE_API_KEY); 
+
+	  var apiUrl = process.env.GOOGLE_API_URL+'/timezone/json';
+
+	  apiUrl += '?location='+lat+','+lon+'&timestamp='+timestamp+'&key='+process.env.GOOGLE_API_KEY;
+
+      console.log(apiUrl);
+
+	  var headers = {
+       'Authorization':'Bearer '+process.env.GOOGLE_API_KEY,
+       'Content-Type':'application/json'
+      };
+
+      var data = { headers:headers, url:apiUrl} 
+	  
+	  Timezone.app.observable.sendObservableRequest(data,"get")
+	    .flatMap((response) => {
+	      logger.log('debug','response: '+JSON.stringify(response));
+	      return Rx.Observable.from([JSON.parse(response.body)]).map((body)=>{
+	      		console.log('body.rawOffset: '+JSON.stringify(body.rawOffset));
+	      		var utc = new Number(timestamp) - new Number(body.rawOffset) - new Number(body.dstOffset);
+	      		//what context clues help? -- do we need?
+	      		return {timestamp:utc, formatted: Timezone.app.date.formatUnixTimestamp(utc),lat:lat, lng:lon, originalLocalTime:timestamp, rawOffset:body.rawOffset, dstOffset:body.dstOffset, timeZoneId:body.timeZoneId, timeZoneName:body.timeZoneName, createdAt: Math.floor(new Date().getTime() / 1000) };  
+	      });
+        }).subscribe(Timezone.app.observable.concatAndFinalize(callback,[]));
 	}
 
 
@@ -168,7 +258,7 @@ module.exports = function(Timezone) {
 	};
 
 	Timezone.remoteMethod('testClient1',{
-		description: 'make server API call to get all possible timezones.',
+		description: 'make server API call',
 		accepts:[],
 		http:{path:'/testClient1',verb:'get'},
         returns: {arg: 'testResponse',type:'Object'}
@@ -176,7 +266,7 @@ module.exports = function(Timezone) {
 
 
 	Timezone.remoteMethod('testClient2',{
-		description: 'make server API call to get all possible timezones.',
+		description: 'make server API call',
 		accepts:[],
 		http:{path:'/testClient2',verb:'get'},
         returns: {arg: 'testResponse',type:'Object'}
@@ -206,8 +296,8 @@ module.exports = function(Timezone) {
 
 	});
 
-    //this DOES NOT WORK!
-    //Coordinator schedules a session in MDT, but it'll be stored in UTC.
+    //Coordinator schedules a session in MDT, but it'll be stored in UTC, so convert the timestamp and 
+    //return additional context clues as needed
 	Timezone.remoteMethod('localToUtc',{
 		description: 'publish the given timestamp as a UTC timestamp',
 		accepts:[
@@ -216,7 +306,7 @@ module.exports = function(Timezone) {
 			{arg: 'lon', type: 'number' }
 		],	
 			http:{path:'/localToUtc',verb:'get'},
-        	returns: {arg: 'localTime',type:'Object'}
+        	returns: {arg: 'utc',type:'Object'}
 
 	});
 

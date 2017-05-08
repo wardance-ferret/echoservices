@@ -27,50 +27,50 @@
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "property": "find",
-      "permission": "ALLOW"
+      "permission": "ALLOW",
+      "property": "find"
     },
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "property": "testClient1",
-      "permission": "ALLOW"
+      "permission": "ALLOW",
+      "property": "testClient1"
     },
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "property": "testClient2",
-      "permission": "ALLOW"
+      "permission": "ALLOW",
+      "property": "testClient2"
     },
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "property": "getFromThirdParty",
-      "permission": "ALLOW"
+      "permission": "ALLOW",
+      "property": "getFromThirdParty"
     },
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "property": "fromLatLon",
-      "permission": "ALLOW"
+      "permission": "ALLOW",
+      "property": "fromLatLon"
     },
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "property": "localToUtc",
-      "permission": "ALLOW"
+      "permission": "ALLOW",
+      "property": "localToUtc"
     },
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "property": "utcToLocal",
-      "permission": "ALLOW"
+      "permission": "ALLOW",
+      "property": "utcToLocal"
     },
     {
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "property": "geocode",
-      "permission": "ALLOW"
+      "permission": "ALLOW",
+      "property": "geocode"
     }
   ],
   "methods": {}

@@ -1,0 +1,38 @@
+{
+  "name": "TzUser",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "lastLocation": {
+      "type": "geopoint"
+    },
+    "timezoneId": {
+      "type":"string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "timezone":{
+      "type": "belongsTo",
+      "model": "Timezone",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

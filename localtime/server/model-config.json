@@ -14,7 +14,8 @@
     ]
   },
   "User": {
-    "dataSource": "tzapiDb"
+    "dataSource": "tzapiDb",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "tzapiDb",
@@ -36,6 +37,26 @@
     "public": false
   },
   "Timezone": {
+    "dataSource": "tzapiDb",
+    "public": true
+  },
+  "Person": {
+    "dataSource": "tzapiDb",
+    "public": true
+  },
+  "Program": {
+    "dataSource": "tzapiDb",
+    "public": true
+  },
+  "City": {
+    "dataSource": "tzapiDb",
+    "public": true
+  },
+  "Session": {
+    "dataSource": "tzapiDb",
+    "public": true
+  },
+  "TzUser": {
     "dataSource": "tzapiDb",
     "public": true
   }

@@ -1,0 +1,63 @@
+[   
+    {
+      "principalType": "ROLE",
+      "principalId" : "$everyone",
+      "permission" : "ALLOW",
+      "property" : "__get__timezone"
+    }, 
+    {
+      "principalType": "ROLE",
+      "principalId" : "$everyone",
+      "permission" : "ALLOW",
+      "property" : "find"
+    }, 
+    {
+      "principalType": "ROLE",
+      "principalId" : "$owner",
+      "permission" : "ALLOW",
+      "property" : "findById"
+    },
+
+    {
+      "principalType": "ROLE",
+      "principalId" : "$everyone",
+      "permission" : "ALLOW",
+      "property" : "delete"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId" : "$everyone",
+      "permission" : "ALLOW",
+      "property" : "create"
+    },   
+    {
+      "principalType": "ROLE",
+      "principalId" : "$owner",
+      "permission" : "ALLOW",
+      "property" : "updateAttributes"
+    }, 
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "login"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "logout"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "resetPassword",
+      "accessType": "EXECUTE"
+    }
+]

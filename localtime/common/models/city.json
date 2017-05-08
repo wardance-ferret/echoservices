@@ -1,0 +1,32 @@
+{
+  "name": "City",
+  "plural": "Cities",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "latlng": {
+      "type": "geopoint",
+      "required": true
+    },
+    "timezoneId": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "timezone": {
+      "type": "belongsTo",
+      "model": "Timezone",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

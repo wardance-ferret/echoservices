@@ -1,0 +1,41 @@
+{
+  "name": "Person",
+  "plural": "People",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "middleName": {
+      "type": "string",
+      "required": true,
+      "default": "''"
+    },
+    "tzuserId": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "tzuser": {
+      "type": "belongsTo",
+      "model": "TzUser",
+      "foreignKey": "tzuserId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
