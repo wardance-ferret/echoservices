@@ -30,7 +30,7 @@ module.exports = function(app){
 
 		concatAndFinalize: (loopbackNext, results) => {
 	          return {
-			      next: (x) => {   console.log('result: '+JSON.stringify(x)); results = results.concat(x);},
+			      next: (x) => {   console.log('concatAndFinalize: '+JSON.stringify(x)); results = results.concat(x);},
 			      error: (err) => { loopbackNext(err); },
 			      complete: () => { loopbackNext(null, results); }
 		  	  };

@@ -142,6 +142,34 @@ module.exports = function(Timezone) {
 	};
 
 
+	//can we flip a switch and get an observable, or not?
+	Timezone.getTimeZoneObserv = function(timestamp,lat,lon){
+
+		var apiUrl = process.env.GOOGLE_API_URL+'/timezone/json';
+
+		if ((timestamp == 'undefined')||(lat == 'undefined')||(lon == 'undefined')){
+			console.log('there was a problem with the params for google api call');
+			return Rx.Observable.from([[]]);
+		}
+
+	  	apiUrl += '?location='+lat+','+lon+'&timestamp='+timestamp+'&key='+process.env.GOOGLE_API_KEY;
+
+	  	var headers = {
+	       'Authorization':'Bearer '+process.env.GOOGLE_API_KEY,
+	       'Content-Type':'application/json'
+      	};
+
+      var data = { headers:headers, url:apiUrl} 
+	  
+	  return Timezone.app.observable.sendObservableRequest(data,"get")
+	    .flatMap((response) => {
+	      logger.log('debug','response: '+JSON.stringify(response));
+	      return Rx.Observable.from([JSON.parse(response.body)]);
+        })
+
+	};
+
+
     /*
     *@name Timezone#utcToLocal
     *@function
@@ -176,12 +204,22 @@ module.exports = function(Timezone) {
 	      		console.log('body.rawOffset: '+JSON.stringify(body.rawOffset));
 	      		var localtime = new Number(timestamp) + new Number(body.rawOffset) + new Number(body.dstOffset);
 	      		//what context clues help? -- do we need?
-	      		return {timestamp:localtime, formatted: Timezone.app.date.formatUnixTimestamp(localtime), lat:lat, lng:lon, originalUtc:timestamp, rawOffset:body.rawOffset, dstOffset:body.dstOffset, timeZoneId:body.timeZoneId, timeZoneName:body.timeZoneName, createdAt: Math.floor(new Date().getTime()/1000)};  
+	      		return {timestamp:localtime,
+	      		        note: Timezone.app.date.formatUnixTimestamp(localtime),
+	      		        lat:lat,
+	      		        lng:lon,
+	      		        originalUtc:timestamp,
+	      		        rawOffset:body.rawOffset,
+	      		        dstOffset:body.dstOffset,
+	      		        timeZoneId:body.timeZoneId,
+	      		        timeZoneName:body.timeZoneName,
+	      		        createdAt: Math.floor(new Date().getTime()/1000)};  
 	      });
         }).subscribe(Timezone.app.observable.concatAndFinalize(callback,[]));
 
 	
 	};
+
 
 	Timezone.localToUtc = function(timestamp, lat, lon, callback){
 	  
@@ -207,10 +245,20 @@ module.exports = function(Timezone) {
 	      		console.log('body.rawOffset: '+JSON.stringify(body.rawOffset));
 	      		var utc = new Number(timestamp) - new Number(body.rawOffset) - new Number(body.dstOffset);
 	      		//what context clues help? -- do we need?
-	      		return {timestamp:utc, formatted: Timezone.app.date.formatUnixTimestamp(utc),lat:lat, lng:lon, originalLocalTime:timestamp, rawOffset:body.rawOffset, dstOffset:body.dstOffset, timeZoneId:body.timeZoneId, timeZoneName:body.timeZoneName, createdAt: Math.floor(new Date().getTime() / 1000) };  
+	      		return {timestamp:utc,
+	      		        note: Timezone.app.date.formatUnixTimestamp(utc),
+	      		        lat:lat,
+	      		        lng:lon,
+	      		        originalLocalTime:timestamp,
+	      		        rawOffset:body.rawOffset,
+	      		        dstOffset:body.dstOffset,
+	      		        timeZoneId:body.timeZoneId,
+	      		        timeZoneName:body.timeZoneName,
+	      		        createdAt: Math.floor(new Date().getTime() / 1000) };  
 	      });
         }).subscribe(Timezone.app.observable.concatAndFinalize(callback,[]));
 	}
+
 
 
 	Timezone.makeUrlSafeForQuery = function(rawUrl){
