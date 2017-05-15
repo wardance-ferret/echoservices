@@ -19,6 +19,9 @@
       "required": true,
       "default": false
     },
+    "location": {
+      "type":"geopoint"
+    },
     "timezoneId": {
       "type": "string"
     }

@@ -149,7 +149,10 @@ module.exports = function(Program) {
 				var dateString2 = Program.app.date.formatUnixMilliseconds(new Number(remCtx.result[timeField].timestamp)) + ' System time (~MT)';
             	remCtx.result[timeField].note2 = dateString2;
 
-				var dateString3 = Program.app.date.formatUnixMilliseconds(Program.serverToLocal(remCtx.result[timeField].timestamp, timezone.rawOffset, timezone.dstOffset)) + ' '+timezone.abbrev;
+				var dateString3 = Program.app.date.formatUnixMilliseconds(
+					Program.serverToLocal(remCtx.result[timeField].timestamp,
+										  timezone.rawOffset, timezone.dstOffset))
+				                          + ' '+timezone.abbrev;
             	remCtx.result[timeField].note3 = dateString3;
 
             	//var dateString = Program.app.date.formatUnixMilliseconds(Program.serverToLocalTest(remCtx.result.startTime.timestamp, timezone.rawOffset, timezone.dstOffset)) + ' '+timezone.abbrev;			

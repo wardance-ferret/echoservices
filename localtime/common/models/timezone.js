@@ -118,6 +118,8 @@ module.exports = function(Timezone) {
 
 	Timezone.getTimeZone = function(timestamp, lat, lon, callback){
 
+	 callback = callback || utils.createPromiseCallback();	
+
 	  console.log('API KEY: '+process.env.GOOGLE_API_KEY); 
 
 	  var apiUrl = process.env.GOOGLE_API_URL+'/timezone/json';
@@ -136,6 +138,7 @@ module.exports = function(Timezone) {
 	  Timezone.app.observable.sendObservableRequest(data,"get")
 	    .flatMap((response) => {
 	      logger.log('debug','response: '+JSON.stringify(response));
+	      console.log('response: '+JSON.stringify(response));
 	      return Rx.Observable.from([JSON.parse(response.body)]);
         }).subscribe(Timezone.app.observable.concatAndFinalize(callback,[]));
 
