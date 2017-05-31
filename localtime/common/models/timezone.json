@@ -11,14 +11,29 @@
       "required": true
     },
     "geoid": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "abbrev": {
       "type": "string",
       "required": true,
       "default": ""
-    }
+    },
+    "rawOffsetFromUtcSecs":{
+      "type": "number",
+      "default": 0
+    },
+    "dstOffsetFromUtcSecs":{
+      "type": "number",
+      "default": 0
+    },
+    "offsetFromUtcHours": {
+      "type": "string",
+      "default": ""
+    },
+    "note": {
+      "type": "string",
+      "default": ""
+    }    
   },
   "validations": [],
   "relations": {},

@@ -14,7 +14,7 @@
       "type": "object"
     },
     "endTime": {
-      "type": "object"
+      "type": "date"
     },
     "programId": {
       "type": "string",

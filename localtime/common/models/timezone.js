@@ -249,7 +249,7 @@ module.exports = function(Timezone) {
 	      		var utc = new Number(timestamp) - new Number(body.rawOffset) - new Number(body.dstOffset);
 	      		//what context clues help? -- do we need?
 	      		return {timestamp:utc,
-	      		        note: Timezone.app.date.formatUnixTimestamp(utc),
+	      		        note: Timezone.app.date.formatUnixTimestamp(utc)+' UTC',
 	      		        lat:lat,
 	      		        lng:lon,
 	      		        originalLocalTime:timestamp,

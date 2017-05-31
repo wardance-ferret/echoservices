@@ -117,8 +117,8 @@ module.exports = function(Program) {
 				return Rx.Observable.from([[]]);
 			}
 
-			//console.log(JSON.stringify(timezone));
-            return Rx.Observable.fromPromise(Program.app.models.Timezone.find({where: {name : timezone.timeZoneName}})).flatMap((tz)=>{
+			console.log(JSON.stringify(timezone));
+            return Rx.Observable.fromPromise(Program.app.models.Timezone.find({where: {name : timezone.timeZoneName, rawOffsetFromUtcSecs: timezone.rawOffset, dstOffsetFromUtcSecs: timezone.dstOffset}})).flatMap((tz)=>{
             	if (!tz.length) {
             		return Rx.Observable.from([[]]);
             	}
@@ -155,7 +155,8 @@ module.exports = function(Program) {
 				                          + ' '+timezone.abbrev;
             	remCtx.result[timeField].note3 = dateString3;
 
-            	//var dateString = Program.app.date.formatUnixMilliseconds(Program.serverToLocalTest(remCtx.result.startTime.timestamp, timezone.rawOffset, timezone.dstOffset)) + ' '+timezone.abbrev;			
+            	//var dateString = Program.app.date.formatUnixMilliseconds(Program.serverToLocalTest(
+            	//remCtx.result.startTime.timestamp, timezone.rawOffset, timezone.dstOffset)) + ' '+timezone.abbrev;			
 				//remCtx.result.startTime.note = dateString;
 
             }

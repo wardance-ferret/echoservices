@@ -4,6 +4,23 @@ describe('time zone tests',function(){
    const expect = require('expect.js');
    var app = require('../server/server'); 
 
+   it('iso date from mongo can be converted to ms', function(){
+     var dateObj = new Date('2017-11-06T12:00:00.000Z');
+     expect(dateObj.getTime()).to.equal(1509969600000);
+   });
+
+   it('iso date from mongo can be converted to another local time', function(){
+     var dateObj = new Date('2017-11-06T12:00:00.000Z');
+     expect(dateObj.getTime()).to.equal(1509969600000);
+   });
+
+   it('time given in another timezone be converted to server time', function(){
+     var dateObj = new Date('8:00 11/6/2017 EST');
+     expect(dateObj.toLocaleString()).to.equal('11/6/2017, 6:00:00 AM');
+     expect(dateObj.getTime()).to.equal(1509973200000);
+   });
+
+
    it('date can be converted to a timestamp', function(){
    	 var dateObj = new Date(2017,11,16,0,0,0);
    	 expect(dateObj.getTime()).to.equal(1513407600000); 
@@ -29,6 +46,8 @@ describe('time zone tests',function(){
        expect(dateObj.toLocaleString()+' MST').to.equal('12/16/2017, 8:00:00 AM MST');
        expect(dateObj.getTimezoneOffset()).to.equal(420);
 
+       var apiOffset;
+
        //EST location:  Washington DC
        // 40.75368539999999,-73.9991637 
        app.models.Timezone.getTimeZone((dateObj.getTime()/1000),'40.75368539999999','-73.9991637', function(result,error){
@@ -37,6 +56,8 @@ describe('time zone tests',function(){
             } else {
               console.log('google tz api result: '+JSON.stringify(result)); 
             }
+
+            //
 
             //milliseconds
             var offset = apiOffset || -18000*1000;

@@ -9,7 +9,13 @@ module.exports = function(app){
 
 		formatUnixTimestamp: (timestamp) => {
 			var dateObj = new Date(timestamp*1000);
-			return dateObj.getHours()+':'+(dateObj.getMinutes() < 10?'0'+dateObj.getMinutes():dateObj.getMinutes())+' '+dateObj.getDate() + ' ' + app.date.monthName(dateObj) + ' ' + dateObj.getFullYear();
+
+			return dateObj.toUTCString();
+			// return dateObj.getHours()+':'
+			//      +(dateObj.getMinutes() < 10?'0'+dateObj.getMinutes():dateObj.getMinutes())
+			//      +' '+dateObj.getDate() + ' ' 
+			//      + app.date.monthName(dateObj) + ' '
+			//       + dateObj.getFullYear();
 			//+'. UTC Offset: '+(dateObj.getTimezoneOffset()/60)+' hours';
 		},
 
