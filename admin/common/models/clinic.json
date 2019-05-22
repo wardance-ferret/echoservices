@@ -2,9 +2,6 @@
   "name": "Clinic",
   "base": "PersistedModel",
   "idInjection": true,
-  "options": {
-    "validateUpsert": true
-  },
   "properties": {
     "name": {
       "type": "string",
@@ -29,6 +26,14 @@
       "type": "belongsTo",
       "model": "GeoEntity",
       "foreignKey": ""
+    },
+    "members": {
+      "type": "embedsMany",
+      "model": "Member",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
     }
   },
   "acls": [],

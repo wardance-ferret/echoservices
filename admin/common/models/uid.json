@@ -1,0 +1,23 @@
+{
+  "name": "Uid",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "modelName": {
+      "type": "string",
+      "required": true
+    },
+    "maxId": {
+      "type": "string",
+      "required": true
+    }
+
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

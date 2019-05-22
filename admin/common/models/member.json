@@ -1,0 +1,31 @@
+{
+  "name": "Member",
+  "base": "Model",
+  "idInjection": true,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "required": false
+    },
+    "role": {
+      "type": "string",
+      "required": true,
+      "default": "Participant"
+    },
+    "registered": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "person": {
+      "type": "belongsTo",
+      "model": "Person"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

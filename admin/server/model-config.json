@@ -47,5 +47,13 @@
   "GeoEntity": {
     "dataSource": "adminDb",
     "public": true
+  },
+  "Member": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Uid": {
+    "dataSource": "adminDb",
+    "public": true
   }
 }
