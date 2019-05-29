@@ -14,7 +14,7 @@ var Options = function(api,methodId,pathString,queryObject){
     //FOR NOW:  assume this is for Zoom only, we need only jwt auth
     const apiUri = api || 'https://api.zoom.us/v2'; 	
     const methodId = methodId || '/userinfo'; 
-    const path = pathString || '/egarbin@salud.unm.edu';
+    const path = pathString || '/myemail';
     const query = queryObject || { status: 'active'}
     const userAgent = 'Zoom-api-Jwt-Request';
     //is it a good idea to generate bearerToken each time there is a new Options?  No
