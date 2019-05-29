@@ -7,13 +7,21 @@
 
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+const path = require('path');
 
 var app = module.exports = loopback();
+if (!process.env.NODE_ENV){
+  console.log("NODE_ENV was not set, loading .env file.");
+  require('dotenv').config({'path': path.join(__dirname,'../.env')});
+}
+
+var DatasourcesWriter = require('./environment/datasources-writer');
+console.log('NODE_ENV: '+JSON.stringify(process.env.NODE_ENV));
 
 app.start = function() {
   // start the web server
-  return app.listen(function() {
-    app.emit('started');
+  var server = app.listen(function() {
+    app.emit('started',server);
     var baseUrl = app.get('url').replace(/\/$/, '');
     console.log('Web server listening at: %s', baseUrl);
     if (app.get('loopback-component-explorer')) {
@@ -21,6 +29,7 @@ app.start = function() {
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     }
   });
+  return server;
 };
 
 // Bootstrap the application, configure models, datasources and middleware.

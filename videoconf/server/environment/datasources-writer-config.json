@@ -1,0 +1,23 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "storage": {
+    "name": "storage",
+    "connector": "loopback-component-storage",
+    "provider": "azure",
+    "storageAccount": "$AZURE_STORAGE_ACCOUNT",
+    "storageAccessKey": "$AZURE_STORAGE_ACCESS_KEY",
+    "maxFileSize": 52428800,
+    "nameConflict": "makeUnique"
+  },
+  "transient": {
+    "name": "transient",
+    "connector": "transient"
+  },
+  "restapi": {
+    "name": "restapi",
+    "connector": "rest"
+  }
+}
