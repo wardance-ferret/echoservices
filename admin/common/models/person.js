@@ -1,6 +1,7 @@
 'use strict';
 
 require('dotenv').config();
+//npm http is not documented and there is no repo (https://www.npmjs.com/package/http).  suggest we use request or request-promise instead.
 var http = require('http');
 
 module.exports = function(Person) {

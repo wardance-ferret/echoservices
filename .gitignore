@@ -3,3 +3,5 @@
 docs
 logs
 node_modules
+*.tar
+*.tar.1
